@@ -1,0 +1,3 @@
+[submodule "ParallelQueue"]
+	path = ParallelQueue
+	url = git@github.com:raulett/ParallelQueue.git
