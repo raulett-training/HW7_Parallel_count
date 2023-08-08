@@ -19,5 +19,5 @@ std::string tolower(const std::string &str) {
 void count_words(std::istream& stream, Counter& counter) {
     std::for_each(std::istream_iterator<std::string>(stream),
                   std::istream_iterator<std::string>(),
-                  [&counter](const std::string &s) { ++counter[tolower(s)]; general++;});
+                  [&counter](const std::string &s) { ++counter[tolower(s)];});
 }
