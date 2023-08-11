@@ -2,21 +2,23 @@
 #include <atomic>
 #include "count_words.h"
 #include "print_topk.h"
-#include <Windows.h>
+//#include <Windows.h>
 #include <chrono>
 #include <fstream>
 #include <future>
 #include <list>
 #include "ParallelQueue.h"
 #include "MergeCounters.h"
+#include "locale"
 
 
 //std::atomic<uint64_t> general = 0;
 const size_t TOPK = 10;
-const size_t iteration_count = 10;
+const size_t iteration_count = 1;
 
 int main(int argc, char *argv[]) {
-    SetConsoleOutputCP(CP_UTF8);
+//    SetConsoleOutputCP(CP_UTF8);
+    std::locale::global(std::locale("en_US.UTF-8"));
     std::cout<< "make: " << iteration_count << " repeat for each algorithm." <<std::endl;
     auto total_time = std::chrono::milliseconds(0);
     std::cout<< "-----sequential algorithm-------"<<std::endl;
@@ -27,7 +29,7 @@ int main(int argc, char *argv[]) {
         std::cout << k+1 << ", ";
         auto start = std::chrono::high_resolution_clock::now();
         freq_dict = Counter();
-        for (size_t i = 1; i < argc; i++) {
+        for (int i = 1; i < argc; i++) {
             std::ifstream input{argv[i]};
             if (!input.is_open()) {
                 std::cerr << "Failed to open file " << argv[i] << '\n';
@@ -60,7 +62,7 @@ int main(int argc, char *argv[]) {
         freq_dict = Counter();
         auto start = std::chrono::high_resolution_clock::now();
 
-        for (size_t i = 1; i < argc; i++) {
+        for (int i = 1; i < argc; i++) {
             std::ifstream input{argv[i]};
             if (!input.is_open()) {
                 std::cerr << "Failed to open file " << argv[i] << '\n';
@@ -79,12 +81,11 @@ int main(int argc, char *argv[]) {
         merge_workers.reserve(num_threads);
         for (size_t i=0; i<num_threads; i++){
             is_working_count++;
-            merge_workers.push_back(std::move(std::thread(
-                    [&queue, &is_working_count]()mutable {
-                        MergeCounters(queue, is_working_count);})));
+            merge_workers.emplace_back([&queue, &is_working_count]()mutable {
+                                                    MergeCounters(queue, is_working_count);});
         }
 
-        for(size_t i = 0; i<argc-1; i++){
+        for(int i = 0; i<argc-1; i++){
             tasks[i].wait();
         }
 

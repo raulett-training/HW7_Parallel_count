@@ -1,7 +1,10 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.20)
 project(parallel_count)
 
 set(CMAKE_CXX_STANDARD 20)
+#set(CMAKE_SYSTEM_NAME Windows)
+#SET(CMAKE_C_COMPILER gcc)
+#SET(CMAKE_CXX_COMPILER g++)
 
 add_executable(parallel_count main.cpp
         CountWords/count_words.cpp

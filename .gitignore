@@ -1,2 +1,6 @@
 .idea/
 cmake-build-debug/
+cmake-build-debug-docker/
+cmake-build-debug-docker-1/
+cmake-build-debug-system-clang/
+cmake-build-release-system-clang/
